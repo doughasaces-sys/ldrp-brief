@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LDRP Morning Brief</title>
+<!-- PWA: installable one-tap app -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0f172a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="LDRP Brief">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+  :root{ --bg:#0f172a; --card:#1e293b; --ink:#f1f5f9; --sub:#94a3b8; --accent:#22c55e; --accent2:#3b82f6; --danger:#ef4444; }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ margin:0; padding:0; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+  .wrap{ max-width:720px; margin:0 auto; padding:16px 16px 60px; }
+  h1{ font-size:19px; margin:6px 0 2px; }
+  .date{ color:var(--sub); font-size:14px; margin-bottom:14px; }
+  .playbar{ position:sticky; top:0; z-index:5; background:var(--bg); padding:8px 0 12px; }
+  #play{ width:100%; border:none; border-radius:16px; padding:22px; font-size:24px; font-weight:800; color:#04240f;
+         background:var(--accent); display:flex; align-items:center; justify-content:center; gap:12px; cursor:pointer; box-shadow:0 6px 18px rgba(34,197,94,.35); }
+  #play.playing{ background:var(--danger); color:#2a0808; box-shadow:0 6px 18px rgba(239,68,68,.35); }
+  #play .ico{ font-size:26px; }
+  .controls{ display:flex; gap:8px; margin-top:8px; }
+  .controls button{ flex:1; background:var(--card); color:var(--ink); border:1px solid #334155; border-radius:12px; padding:12px; font-size:15px; cursor:pointer; }
+  .hint{ text-align:center; color:var(--sub); font-size:12.5px; margin-top:8px; }
+  .card{ background:var(--card); border-radius:14px; padding:14px 15px; margin:12px 0; border-left:5px solid #334155; }
+  .card h2{ font-size:13px; letter-spacing:.04em; text-transform:uppercase; color:var(--sub); margin:0 0 8px; }
+  .card.meet{ border-left-color:var(--accent2); }
+  .card.site{ border-left-color:#0891b2; }
+  .card.prio{ border-left-color:var(--accent); }
+  .card.safe{ border-left-color:var(--danger); }
+  ul{ margin:0; padding-left:18px; } li{ margin:6px 0; line-height:1.4; font-size:15.5px; }
+  .none{ color:var(--sub); font-style:italic; }
+  .foot{ color:var(--sub); font-size:11.5px; text-align:center; margin-top:20px; line-height:1.6; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="playbar">
+    <button id="play" aria-label="Play morning brief"><span class="ico">&#9654;</span><span id="playlabel">Play my brief</span></button>
+    <div class="controls">
+      <button id="slower">&#128034; Slower</button>
+      <button id="repeat">&#8635; Restart</button>
+      <button id="faster">&#128007; Faster</button>
+    </div>
+    <div class="hint" id="hint">Tap once before you pull out &mdash; it reads over your car Bluetooth. Screen off is fine.</div>
+  </div>
+
+  <h1>LDRP &ldquo;Birthplace&rdquo; &mdash; Morning Brief</h1>
+  <div class="date" id="dateline"></div>
+  <div id="brief"></div>
+  <div class="foot" id="foot"></div>
+</div>
+
+<script>
+/* Day-specific parts (today's meetings, on site today) compute from the real
+   date each open, so they stay correct. Priority lines are a snapshot the 3 AM
+   dashboard run can regenerate. Content refresh: 2026-07-30. */
+
+var MEETINGS = [
+  {date:"2026-08-03", label:"Mon, 2:30 PM", subject:"C-Section & AHU-116 duct review with TowerPinkster (you attend; Erik out)"},
+  {date:"2026-08-05", label:"Wed, 7 AM", subject:"Erik on site going over the project with you"},
+  {date:"2026-08-05", label:"Wed, 11 AM", subject:"Contractor Meeting on Teams"},
+  {date:"2026-08-05", label:"Wed, 1 PM", subject:"OAC Meeting on Teams - bring the agenda"},
+  {date:"2026-08-11", label:"Tue, 12 PM", subject:"Topcon Forma training (tentative, not an LDRP meeting)"}
+];
+var SCHEDULE_TASKS = [
+  {t:"Demolition (Xtreme)", s:"2026-07-22", f:"2026-08-21"},
+  {t:"First Layout (Ritsema)", s:"2026-08-03", f:"2026-08-04"},
+  {t:"Framing Part 1 (Ritsema)", s:"2026-08-03", f:"2026-09-07"},
+  {t:"HVAC Part 1 (MCM)", s:"2026-08-03", f:"2026-09-25"},
+  {t:"Sprinkler mainlines (VFD)", s:"2026-08-03", f:"2026-09-27"},
+  {t:"ICRA barriers - Atrium (McGuire's)", s:"2026-08-05", f:"2026-09-11"},
+  {t:"MCM drilling drains over Atrium (MCM)", s:"2026-08-10", f:"2026-09-11"},
+  {t:"Midwest Glass exterior windows", s:"2026-08-10", f:"2026-08-30"},
+  {t:"Electrical in wall Part 1 (IBID)", s:"2026-08-29", f:"2026-10-02"},
+  {t:"Framing Part 2 (Ritsema)", s:"2026-08-31", f:"2026-10-05"},
+  {t:"Drywall 1st side (Ritsema)", s:"2026-08-31", f:"2026-09-21"},
+  {t:"MCM Plumbing Part 1 in wall (MCM)", s:"2026-08-31", f:"2026-10-02"},
+  {t:"ICRA barriers below floor (McGuire's)", s:"2026-09-20", f:"2026-11-07"}
+];
+var PRIORITY = [
+  "From Erik, top priority: he wants a plan to finish Phase 1 without Phase 1 point 5. Good news - there's now a possible route straight through the roof that would negate it, pending Tower Pinkster's engineering analysis at Monday's two thirty meeting.",
+  "Chad was waiting on your framing start date - you gave him August 3rd for first layout.",
+  "Bulletin 3 went out to M C M, I-BID, and Ritsema. You still owe them the in-person, told-them-directly confirmation to clear the red card.",
+  "Atrium: M C M still owes you their markups on the zone drawing, and the hospital wants the Security area drilled first - you renamed Zone 1 to the area over Security.",
+  "Toilet chases and toilet core drilling stay on hold until Tower Pinkster reissues the sanitary drawings, targeted August 3rd."
+];
+var SAFETY = [
+  "Safety and schedule: the 3rd floor valve replacement is scheduled for tonight, off hours. Until those valves are physically replaced, the 3rd floor lines stay live and there's no water-line demo.",
+  "Xtreme's safety officer needs hard hats and glasses on the 3rd floor, and I-BID needs to blank the live electrical boxes, or she stops demo."
+];
+
+var DOWS=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+var MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+function today(){ return new Date(); }
+function sameDay(a,b){ return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate(); }
+function parseD(s){ var p=s.split("-").map(Number); return new Date(p[0],p[1]-1,p[2]); }
+function todaysMeetings(){ var t=today(); return MEETINGS.filter(function(m){ return sameDay(parseD(m.date),t); }); }
+function onSiteToday(){ var t=today(); t.setHours(12,0,0,0);
+  return SCHEDULE_TASKS.filter(function(x){ var s=parseD(x.s),f=parseD(x.f); f.setHours(23,59,59,0); return t>=s&&t<=f; }); }
+
+function build(){
+  var t=today();
+  document.getElementById("dateline").textContent = DOWS[t.getDay()]+", "+MONTHS[t.getMonth()]+" "+t.getDate()+", "+t.getFullYear();
+  var mtgs=todaysMeetings(), site=onSiteToday(), speech=[], html="";
+  speech.push("Good morning Doug. Here's your Birthplace brief for "+DOWS[t.getDay()]+".");
+
+  html+='<div class="card meet"><h2>Today’s meetings</h2>';
+  if(mtgs.length){ html+="<ul>"; mtgs.forEach(function(m){ html+="<li><b>"+m.label+"</b> &mdash; "+m.subject+"</li>"; }); html+="</ul>";
+    speech.push("Meetings today: "+mtgs.map(function(m){return m.label+", "+m.subject;}).join(". ")+".");
+  } else { html+='<div class="none">No LDRP meetings today.</div>'; speech.push("You have no LDRP meetings today."); }
+  html+="</div>";
+
+  html+='<div class="card prio"><h2>Top of your list</h2><ul>';
+  PRIORITY.forEach(function(p){ html+="<li>"+p+"</li>"; }); html+="</ul></div>";
+  speech.push("Here's the top of your list. "+PRIORITY.join(" "));
+
+  html+='<div class="card safe"><h2>Safety &amp; holds</h2><ul>';
+  SAFETY.forEach(function(p){ html+="<li>"+p+"</li>"; }); html+="</ul></div>";
+  speech.push(SAFETY.join(" "));
+
+  html+='<div class="card site"><h2>On site today</h2>';
+  if(site.length){ html+="<ul>"; site.forEach(function(x){ html+="<li>"+x.t+"</li>"; }); html+="</ul>";
+    speech.push("On site today, per the schedule: "+site.map(function(x){return x.t;}).join(", ")+".");
+  } else { html+='<div class="none">Nothing scheduled on site today.</div>'; speech.push("Nothing is scheduled on site today."); }
+  html+="</div>";
+
+  speech.push("That's your brief. Drive safe.");
+  document.getElementById("brief").innerHTML=html;
+  document.getElementById("foot").innerHTML="Installed app &bull; reads with your phone’s voice &bull; works offline.<br>Day items update automatically; priority lines refresh with the 3 AM dashboard run.";
+  return speech.join(" ");
+}
+var SPEECH_TEXT = build();
+
+var synth = window.speechSynthesis;
+var rate = 1.0, playing=false, utter=null;
+var btn=document.getElementById("play"), label=document.getElementById("playlabel"), hint=document.getElementById("hint");
+function pickVoice(){ if(!synth) return null; var vs=synth.getVoices()||[];
+  var byName=vs.filter(function(v){return /Samantha|Aaron|Google US English|Microsoft (Aria|Guy|Zira|David)/i.test(v.name);});
+  var us=vs.filter(function(v){return /en[-_]US/i.test(v.lang);});
+  return byName[0]||us[0]||vs.find(function(v){return /^en/i.test(v.lang);})||vs[0]||null; }
+function stopSpeak(){ if(synth){ synth.cancel(); } playing=false; btn.classList.remove("playing"); label.textContent="Play my brief"; btn.querySelector(".ico").innerHTML="&#9654;"; }
+function startSpeak(){
+  if(!synth){ hint.textContent="This phone can't read aloud - the brief is on screen to read while parked."; return; }
+  synth.cancel();
+  utter=new SpeechSynthesisUtterance(SPEECH_TEXT);
+  var v=pickVoice(); if(v) utter.voice=v; utter.rate=rate; utter.pitch=1.0;
+  utter.onend=stopSpeak; utter.onerror=stopSpeak;
+  synth.speak(utter);
+  playing=true; btn.classList.add("playing"); label.textContent="Stop"; btn.querySelector(".ico").innerHTML="&#9632;";
+  hint.textContent="Playing… lock the screen and go. Tap again to stop.";
+}
+btn.addEventListener("click", function(){ if(playing) stopSpeak(); else startSpeak(); });
+document.getElementById("repeat").addEventListener("click", startSpeak);
+document.getElementById("faster").addEventListener("click", function(){ rate=Math.min(1.5, rate+0.1); if(playing) startSpeak(); });
+document.getElementById("slower").addEventListener("click", function(){ rate=Math.max(0.7, rate-0.1); if(playing) startSpeak(); });
+if(synth && typeof synth.onvoiceschanged!=="undefined"){ synth.onvoiceschanged=function(){}; }
+
+// Register the service worker (offline + installability). Fails quietly on file://.
+if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
+</script>
+</body>
+</html>
