@@ -6,3 +6,18 @@
         1 file(s) copied.
         1 file(s) copied.
         1 file(s) copied.
+warning: in the working copy of 'icon.svg', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'index.html', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'manifest.webmanifest', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sw.js', LF will be replaced by CRLF the next time Git touches it
+[main 3daa265] Nightly morning brief update
+ 2 files changed, 22 insertions(+)
+ create mode 100644 publish-log.txt
+To https://github.com/doughasaces-sys/ldrp-brief.git
+   c6ca14a..3daa265  main -> main
+Done for this run. 
+===== Thu 07/30/2026 16:03:06.22 ===== 
+        1 file(s) copied.
+        1 file(s) copied.
+        1 file(s) copied.
+        1 file(s) copied.
