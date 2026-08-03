@@ -60,48 +60,51 @@
 <script>
 /* Day-specific parts (today's meetings, on site today) compute from the real
    date each open, so they stay correct. Priority lines are a snapshot the 3 AM
-   dashboard run can regenerate. Content refresh: 2026-07-30. */
+   dashboard run can regenerate. Content refresh: 2026-08-03. */
 
 var MEETINGS = [
-  {date:"2026-08-03", label:"Mon, 2:30 PM", subject:"C-Section & AHU-116 duct review with TowerPinkster (you attend; Erik out)"},
-  {date:"2026-08-05", label:"Wed, 7 AM", subject:"Erik on site going over the project with you"},
-  {date:"2026-08-05", label:"Wed, 11 AM", subject:"Contractor Meeting on Teams"},
-  {date:"2026-08-05", label:"Wed, 1 PM", subject:"OAC Meeting on Teams - bring the agenda"},
-  {date:"2026-08-11", label:"Tue, 12 PM", subject:"Topcon Forma training (tentative, not an LDRP meeting)"}
+  {date:"2026-08-03", label:"Mon, 2:30 PM", subject:"C-Section and A-H-U 116 duct review with Tower Pinkster - you attend; Erik is out at Band Camp and Chad, Phil and Michele are on P-T-O"},
+  {date:"2026-08-05", label:"Wed, 7 AM", subject:"Erik on site going over the project with you - but Erik is at Band Camp this week, so confirm it holds. The Wednesday O-A-C meeting is canceled."},
+  {date:"2026-08-05", label:"Wed, 11 AM", subject:"Contractor Meeting on Teams - Erik at Band Camp, confirm it holds"},
+  {date:"2026-08-11", label:"Tue, 12 PM", subject:"Topcon Forma training (tentative, not an LDRP meeting)"},
+  {date:"2026-08-12", label:"Wed, 1 PM", subject:"Birthplace O-A-C meeting - provide the agenda"}
 ];
 var SCHEDULE_TASKS = [
   {t:"Demolition (Xtreme)", s:"2026-07-22", f:"2026-08-21"},
-  {t:"First Layout (Ritsema)", s:"2026-08-03", f:"2026-08-04"},
-  {t:"Framing Part 1 (Ritsema)", s:"2026-08-03", f:"2026-09-07"},
-  {t:"HVAC Part 1 (MCM)", s:"2026-08-03", f:"2026-09-25"},
-  {t:"Sprinkler mainlines (VFD)", s:"2026-08-03", f:"2026-09-27"},
-  {t:"ICRA barriers - Atrium (McGuire's)", s:"2026-08-05", f:"2026-09-11"},
-  {t:"MCM drilling drains over Atrium (MCM)", s:"2026-08-10", f:"2026-09-11"},
-  {t:"Midwest Glass exterior windows", s:"2026-08-10", f:"2026-08-30"},
-  {t:"Electrical in wall Part 1 (IBID)", s:"2026-08-29", f:"2026-10-02"},
-  {t:"Framing Part 2 (Ritsema)", s:"2026-08-31", f:"2026-10-05"},
-  {t:"Drywall 1st side (Ritsema)", s:"2026-08-31", f:"2026-09-21"},
-  {t:"MCM Plumbing Part 1 in wall (MCM)", s:"2026-08-31", f:"2026-10-02"},
-  {t:"ICRA barriers below floor (McGuire's)", s:"2026-09-20", f:"2026-11-07"}
+  {t:"First Layout (Ritsema) - pushed to Aug 17, on hold", s:"2026-08-17", f:"2026-08-18"},
+  {t:"Framing Part 1 (Ritsema) - pushed to Aug 17, on hold", s:"2026-08-17", f:"2026-09-21"},
+  {t:"HVAC Part 1 (M C M)", s:"2026-08-17", f:"2026-10-09"},
+  {t:"Sprinkler mainlines (V-F-D)", s:"2026-08-17", f:"2026-10-11"},
+  {t:"ICRA barriers - Atrium (McGuire's) - on hold", s:"2026-08-19", f:"2026-09-25"},
+  {t:"MCM drilling drains over Atrium (M C M)", s:"2026-08-24", f:"2026-09-25"},
+  {t:"Midwest Glass exterior windows", s:"2026-08-31", f:"2026-09-14"},
+  {t:"Electrical in wall Part 1 (I-BID)", s:"2026-09-12", f:"2026-10-16"},
+  {t:"Framing Part 2 (Ritsema)", s:"2026-09-14", f:"2026-10-19"},
+  {t:"MCM Plumbing Part 1 in wall (M C M)", s:"2026-09-14", f:"2026-10-16"},
+  {t:"Extensive floor slope prep (Avanti)", s:"2026-10-12", f:"2026-11-07"},
+  {t:"ICRA barriers below floor (McGuire's)", s:"2026-10-04", f:"2026-11-21"}
 ];
 var PRIORITY = [
-  "From Erik, top priority: he wants a plan to finish Phase 1 without Phase 1 point 5. Good news - there's now a possible route straight through the roof that would negate it, pending Tower Pinkster's engineering analysis at Monday's two thirty meeting.",
-  "Chad was waiting on your framing start date - you gave him August 3rd for first layout.",
-  "Bulletin 3 went out to M C M, I-BID, and Ritsema. You still owe them the in-person, told-them-directly confirmation to clear the red card.",
-  "Atrium: M C M still owes you their markups on the zone drawing, and the hospital wants the Security area drilled first - you renamed Zone 1 to the area over Security.",
-  "Toilet chases and toilet core drilling stay on hold until Tower Pinkster reissues the sanitary drawings, targeted August 3rd."
+  "The big change: you and Erik put first layout, framing and the atrium work on hold. There are too many unknowns with the toilet carriers to safely lay out walls or core drill, so first layout is pushed back at least two weeks - probably four - to around August 17th. You already gave M C M, I-BID and Ritsema the heads-up.",
+  "Toilets are now carriers in all rooms. Phil Cooper wants this resolved today, Monday August 3rd. Tower Pinkster will adjust only the furring walls, not the patient-room separation walls, and there are four tight toilet-versus-steel spots to verify - Staff, LDRP 1, Laborist, and R-4. Everything waits on Tower Pinkster reissuing the sanitary drawings and the carriers arriving.",
+  "From Erik, top priority: he's asking whether Terry Beldon's floor crew can come in about a month early to prep the bathroom floor slope while framing runs, since the sloping needs an extra three to four weeks. Get back to Erik with your read.",
+  "Two calls you owe: call Phil Ashton about the third-floor salvage items, his cell is 2-6-9, 9-3-2, 5-5-7-3. And Greg Haynes at Midwest Glass wants to talk about the windows - he marked it high importance.",
+  "Today's two thirty duct review matters. M C M's Jim Brletich says the framing hold actually clears the way to fly the C-section duct, with an estimated arrival of the eighth to the tenth."
 ];
 var SAFETY = [
-  "Safety and schedule: the 3rd floor valve replacement is scheduled for tonight, off hours. Until those valves are physically replaced, the 3rd floor lines stay live and there's no water-line demo.",
-  "Xtreme's safety officer needs hard hats and glasses on the 3rd floor, and I-BID needs to blank the live electrical boxes, or she stops demo."
+  "Safety and schedule: confirm the third-floor valve replacement actually happened. Until the valves are physically replaced, the third-floor domestic lines stay live and there is no water-line demo.",
+  "Xtreme's safety officer needs hard hats and glasses on the third floor, and I-BID needs to blank the live electrical boxes, or she stops demo.",
+  "Fire marshal items from Larry Lamb: keep sealing the firewall and floor and ceiling penetrations next to occupied patient care - those have to pass inspection."
 ];
 // YOUR REMINDERS - pulled from your OneNote / Field Notes + notes-to-self. The 3 AM run
 // REPLACES this list every morning with whatever you jotted, so anything you write in
 // OneNote shows up here (and on the Priority List) the next day. Seed = current notes.
 var REMINDERS = [
-  "Get the tape measure fixed.",
-  "Line up everyone who needs to be at the contractor meeting.",
-  "Ask Eric who does the fire spray where the track is missing."
+  "From your OneNote: the island through-floor location is 41 feet 4 inches from the south wall and 28 feet 5 inches from the elevator.",
+  "From your OneNote: give Rebecca the receipts for the work shirts and for Claude.",
+  "From your OneNote: figure out who gets the med gas units in rooms 33-82 through 33-85 - see if M C M comes to get them.",
+  "From your OneNote: ask Eric who does the fire spray where the track is missing.",
+  "From your OneNote: if Larry calls those firewalls non-compliant and Ritsema tops them out, confirm that's a change order."
 ];
 
 var DOWS=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
