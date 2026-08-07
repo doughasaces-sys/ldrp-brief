@@ -56,3 +56,15 @@ Done for this run.
         1 file(s) copied.
         1 file(s) copied.
         1 file(s) copied.
+warning: in the working copy of 'index.html', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'publish-log.txt', LF will be replaced by CRLF the next time Git touches it
+[main 9438bee] Nightly morning brief update
+ 2 files changed, 14 insertions(+), 6 deletions(-)
+To https://github.com/doughasaces-sys/ldrp-brief.git
+   4e2fae6..9438bee  main -> main
+Done for this run. 
+===== Fri 08/07/2026  5:07:08.91 ===== 
+        1 file(s) copied.
+        1 file(s) copied.
+        1 file(s) copied.
+        1 file(s) copied.

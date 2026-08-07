@@ -60,36 +60,38 @@
 <script>
 /* Day-specific parts (today's meetings, on site today) compute from the real
    date each open, so they stay correct. Priority lines are a snapshot the 3 AM
-   dashboard run can regenerate. Content refresh: 2026-08-04. */
+   dashboard run can regenerate. Content refresh: 2026-08-07. */
 
 var MEETINGS = [
   {date:"2026-08-10", label:"Mon, 4 PM", subject:"Doctor's appointment - personal"},
-  {date:"2026-08-05", label:"Wed, 7 AM", subject:"Erik on site going over the project with you - but Erik is at Band Camp this week, so confirm it holds. The Wednesday O-A-C meeting is canceled."},
-  {date:"2026-08-05", label:"Wed, 11 AM", subject:"Contractor Meeting on Teams - Erik at Band Camp, confirm it holds"},
-  {date:"2026-08-11", label:"Tue, 12 PM", subject:"Topcon Forma training (tentative, not an LDRP meeting)"},
+  {date:"2026-08-11", label:"Tue, 12 PM", subject:"Topcon Forma training (not an LDRP meeting)"},
+  {date:"2026-08-12", label:"Wed, 7 AM", subject:"Erik on site going over the project with you"},
+  {date:"2026-08-12", label:"Wed, 11 AM", subject:"Contractor Meeting on Teams"},
   {date:"2026-08-12", label:"Wed, 1 PM", subject:"Birthplace O-A-C meeting - provide the agenda"}
 ];
 var SCHEDULE_TASKS = [
   {t:"Demolition (Xtreme)", s:"2026-07-22", f:"2026-08-21"},
-  {t:"First Layout (Ritsema) - pushed to Aug 17, on hold", s:"2026-08-17", f:"2026-08-18"},
-  {t:"Framing Part 1 (Ritsema) - pushed to Aug 17, on hold", s:"2026-08-17", f:"2026-09-21"},
+  {t:"First Layout (Ritsema) - Aug 17, on hold for carriers", s:"2026-08-17", f:"2026-08-18"},
+  {t:"Framing Part 1 (Ritsema) - Aug 17, on hold for carriers", s:"2026-08-17", f:"2026-09-21"},
   {t:"HVAC Part 1 (M C M)", s:"2026-08-17", f:"2026-10-09"},
-  {t:"Sprinkler mainlines (V-F-D)", s:"2026-08-17", f:"2026-10-11"},
-  {t:"ICRA barriers - Atrium (McGuire's) - on hold", s:"2026-08-19", f:"2026-09-25"},
-  {t:"MCM drilling drains over Atrium (M C M)", s:"2026-08-24", f:"2026-09-25"},
   {t:"Midwest Glass exterior windows", s:"2026-08-31", f:"2026-09-14"},
-  {t:"Electrical in wall Part 1 (I-BID)", s:"2026-09-12", f:"2026-10-16"},
+  {t:"Swiss Log pneumatic tube", s:"2026-08-31", f:"2026-09-18"},
+  {t:"ICRA barriers - Atrium (McGuire's) - pushed to Sept 8", s:"2026-09-08", f:"2026-10-15"},
+  {t:"MCM drilling drains over Atrium (M C M) - pushed to Sept 14", s:"2026-09-14", f:"2026-10-16"},
+  {t:"Electrical in wall Part 1 (I-BID)", s:"2026-09-14", f:"2026-10-16"},
   {t:"Framing Part 2 (Ritsema)", s:"2026-09-14", f:"2026-10-19"},
-  {t:"MCM Plumbing Part 1 in wall (M C M)", s:"2026-09-14", f:"2026-10-16"},
+  {t:"Sprinkler mainlines part 1 (V-F-D)", s:"2026-09-21", f:"2026-10-23"},
   {t:"Extensive floor slope prep (Avanti)", s:"2026-10-12", f:"2026-11-07"},
-  {t:"ICRA barriers below floor (McGuire's)", s:"2026-10-04", f:"2026-11-21"}
+  {t:"ICRA barriers below floor (McGuire's)", s:"2026-10-29", f:"2026-12-19"}
 ];
 var PRIORITY = [
-  "Big update: Bulletin 4 came in overnight and settles the toilet carrier design - the chase grows to 12 inches by moving the furring wall in an inch. That is the drawing you were holding framing for. Get Bulletin 4 out to Ritsema and M C M. First layout is still around August 17th; the last gate now is ordering the carriers and their lead time.",
-  "Carriers in all rooms is resolved by Bulletin 4 - only the furring walls moved, the patient-room separation walls are untouched. Still eyeball the four tight toilet-versus-steel spots as the chases get framed: Staff, LDRP 1, Laborist, and R-4.",
-  "From Erik, top priority: he's asking whether Terry Beldon's floor crew can come in about a month early to prep the bathroom floor slope while framing runs, since the sloping needs an extra three to four weeks. Get back to Erik with your read.",
-  "Two calls you owe: call Phil Ashton about the third-floor salvage items, his cell is 2-6-9, 9-3-2, 5-5-7-3. And Greg Haynes at Midwest Glass wants to talk about the windows - he marked it high importance.",
-  "On the C-section duct route: the Monday duct review has happened and Tower Pinkster is finishing the engineering analysis. M C M's Jim Brletich says the framing hold actually clears the way to fly the duct, with an estimated arrival of the eighth to the tenth - watch for Tower Pinkster's sign-off."
+  "From Erik, top priority: he forwarded Team Sahr's C-T build-out, and Jeff Kartes needs answers before he can price it - the door numbers, why the control-room door is two and three-eighths inch, the wood veneer, the lead thickness, and whether to quote the borrowed lite. Get him those.",
+  "From Erik earlier, still open: whether Terry Beldon's floor crew can come in about a month early to prep the bathroom floor slope while framing runs, since the sloping needs an extra three to four weeks. Give Erik your read.",
+  "The schedule moved: you reworked it on the sixth for the carrier lead time. The atrium barriers and M C M's drilling over the atrium slid about three weeks later, sprinkler mainlines split in two, and door-frame tasks were added. Demolition, first layout and framing part one all hold. The Schedule Changes card stays red until you send the updated-schedule email sitting in your drafts.",
+  "Carriers are the gate for framing and the atrium: M C M's price came in on the sixth as R-F-C zero-zero-two, and Rebecca is drafting change order two. Once the submittal and the change order are approved, the roughly four-week carrier lead starts.",
+  "Swiss Log: the kickoff call happened on the sixth, and Chris Dominguez signed and returned Tower Pinkster's C-A-D waiver. Now it's on Tower Pinkster to release the C-A-D file so he can start submittals - there's a four to six week lead on some of the material.",
+  "Coordinate the A-tower delivery: Ritsema is bringing twelve-foot material up A-tower next Wednesday, seven-thirty to ten-thirty in the morning. You asked Chad to notify the A-tower floor managers - make sure that lands before the twelfth.",
+  "One call you still owe: Greg Haynes at Midwest Glass wants to talk about the windows - he marked it high importance."
 ];
 var SAFETY = [
   "Safety and schedule: confirm the third-floor valve replacement actually happened. Until the valves are physically replaced, the third-floor domestic lines stay live and there is no water-line demo.",
